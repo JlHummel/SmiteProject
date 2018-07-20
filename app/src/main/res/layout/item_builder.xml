@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:hint="Name"
+        android:textSize="30sp" />
+    <TextView
+        android:id="@+id/health"
+        android:hint="Health"
+        android:layout_below="@+id/pic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/mana"
+        android:hint="Mana"
+        android:layout_below="@+id/health"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/power"
+        android:hint="Power"
+        android:layout_below="@+id/mana"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/physical"
+        android:hint="Physical"
+        android:layout_below="@+id/power"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/magical"
+        android:hint="Magical"
+        android:layout_below="@+id/physical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/speed"
+        android:hint="Speed"
+        android:layout_below="@+id/magical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <TextView
+        android:id="@+id/attackspd"
+        android:hint="Attack Speed"
+        android:layout_below="@+id/speed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp" />
+
+    <Button
+        android:id="@+id/lvlUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:text="UP" />
+
+    <Button
+        android:id="@+id/lvlDown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:text="DOWN" />
+
+    <ImageButton
+        android:id="@+id/item_1"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_below="@id/attackspd"
+        android:scaleType="fitCenter"
+        android:layout_alignParentStart="true"/>
+
+    <ImageButton
+        android:id="@+id/item_2"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:scaleType="fitCenter"
+        android:layout_below="@id/attackspd"
+        android:layout_toRightOf="@+id/item_1" />
+
+    <Button
+        android:id="@+id/item_3"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/attackspd"
+        android:layout_toRightOf="@+id/item_2"/>
+
+    <Button
+        android:id="@+id/item_4"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/attackspd"
+        android:layout_toRightOf="@+id/item_3"/>
+
+    <Button
+        android:id="@+id/item_5"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/attackspd"
+        android:layout_toRightOf="@+id/item_4"/>
+
+    <Button
+        android:id="@+id/item_6"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/attackspd"
+        android:layout_toRightOf="@+id/item_5"/>
+
+    <ImageView
+        android:id="@+id/pic"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:translationY="20dp"/>
+</RelativeLayout>
