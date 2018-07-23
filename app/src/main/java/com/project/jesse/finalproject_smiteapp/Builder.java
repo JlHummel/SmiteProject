@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -24,19 +26,26 @@ import java.net.URL;
 import java.util.List;
 
 public class Builder extends AppCompatActivity {
-    String godname,url;
-    List<String> info;
+
+    String godname;
     TextView name;
-    JSONArray obj;
     ImageButton icon;
+    private JSONArray obj;
+    private RecyclerView recyclerView;
+    private Rec_Lists adapter;
+    private RecyclerView.LayoutManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_builder);
 
-        name = (TextView)findViewById(R.id.Test);
-        icon = (ImageButton) findViewById(R.id.test);
+//        name = (TextView)findViewById(R.id.Test);
+//        icon = (ImageButton) findViewById(R.id.test);
+        recyclerView = (RecyclerView) findViewById(R.id.godPick);
+        manager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(manager);
+
 
         String json = null;
         try {
@@ -47,42 +56,45 @@ public class Builder extends AppCompatActivity {
             is.close();
             json = new String(buffer, "UTF-8");
             obj = new JSONArray(json);
-            name.setText(obj.getJSONObject(0).getString("Name"));
-            url = obj.getJSONObject(0).getString("godIcon_URL");
-            Log.d("Builder", "Message: " + obj.getJSONObject(0).getString("godIcon_URL"));
+            adapter = new Rec_Lists(obj, this);
+            recyclerView.setAdapter(adapter);
+//            name.setText(obj.getJSONObject(0).getString("Name"));
+//            url = obj.getJSONObject(0).getString("godIcon_URL");
+//            Log.d("Builder", "Message: " + obj.getJSONObject(0).getString("godIcon_URL"));
 
         } catch (Exception e) {
             Log.d("Builder", "Error: " + e.toString());
         }
 
 
-            Thread thread = new Thread(new Runnable(){
-                @Override
-                public void run(){
-                    try {
-                    InputStream is = (InputStream) new URL(url).getContent();
-                    Drawable d = Drawable.createFromStream(is, "src name");
-                    icon.setImageDrawable(d);
-                    Log.d("Builder", "Message: " + d.toString());
-                    } catch (Exception e) {
-                        Log.d("Builder", "Error: " + e.toString());
-                    }
-                }
-
-            });
-        thread.start();
-        try{
-            thread.join();
-        } catch (Exception e){
-            Log.e("Builder", "Exception: " + e.getMessage());
-        }
-
-        icon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity( new Intent(Builder.this, ItemBuilder.class));
-            }
-        });
+//
+//            Thread thread = new Thread(new Runnable(){
+//                @Override
+//                public void run(){
+//                    try {
+//                    InputStream is = (InputStream) new URL(url).getContent();
+//                    Drawable d = Drawable.createFromStream(is, "src name");
+//                    icon.setImageDrawable(d);
+//                    Log.d("Builder", "Message: " + d.toString());
+//                    } catch (Exception e) {
+//                        Log.d("Builder", "Error: " + e.toString());
+//                    }
+//                }
+//
+//            });
+//        thread.start();
+//        try{
+//            thread.join();
+//        } catch (Exception e){
+//            Log.e("Builder", "Exception: " + e.getMessage());
+//        }
+//
+//        icon.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                startActivity( new Intent(Builder.this, ItemBuilder.class));
+//            }
+//        });
 
 
 

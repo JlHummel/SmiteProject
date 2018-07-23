@@ -21,13 +21,16 @@ import java.net.URL;
 
 public class ItemBuilder extends AppCompatActivity{
 
+    public static Integer god;
+    public static String[] itempic = new String[6];
+    public static Drawable[] itempictures = new Drawable[6];
     String url, currName;
-    Integer lvl, item;
+    Integer lvl, item, pickedItem;
     double atkspeed, speed, health, mana, power,physical,magical, atkspeed_pl, speed_pl, health_pl, mana_pl, power_pl, physical_pl, magical_pl;
     TextView name, atkspd,spd, hlt, man, pwr, phys, mag;
     ImageView pic;
-    JSONObject obj;
-    ImageButton item1,item2;
+    JSONObject obj, itemss;
+    ImageButton item1,item2, item3, item4, item5, item6;
     Button up, down;
 
     @Override
@@ -47,21 +50,40 @@ public class ItemBuilder extends AppCompatActivity{
 
         item1 = (ImageButton) findViewById(R.id.item_1);
         item2 = (ImageButton) findViewById(R.id.item_2);
+        item3 = (ImageButton) findViewById(R.id.item_3);
+        item4 = (ImageButton) findViewById(R.id.item_4);
+        item5 = (ImageButton) findViewById(R.id.item_5);
+        item6 = (ImageButton) findViewById(R.id.item_6);
         up = (Button) findViewById(R.id.lvlUp);
         down = (Button) findViewById(R.id.lvlDown);
 
         lvl = 1;
-        item = getIntent().getIntExtra("item", -1);
+
+        item = getIntent().getIntExtra("itemNum", -1);
+        pickedItem = getIntent().getIntExtra("pick", 0);
+        if(getIntent().getIntExtra("pos", -1) != -1)
+        {
+            god = getIntent().getIntExtra("pos", -1);
+        }
         String json = null;
 
         try {
+
             InputStream is = getResources().openRawResource(R.raw.gods);
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);
             is.close();
             json = new String(buffer, "UTF-8");
-            obj = new JSONArray(json).getJSONObject(0);
+            obj = new JSONArray(json).getJSONObject(god);
+
+             is = getResources().openRawResource(R.raw.items);
+            size = is.available();
+            byte[] buffr = new byte[size];
+            is.read(buffr);
+            is.close();
+            json = new String(buffer, "UTF-8");
+            itemss = new JSONArray(json).getJSONObject(pickedItem);
 
             String buff = obj.getString("Name") + " lvl: " + lvl;
             currName = obj.getString("Name");
@@ -118,15 +140,31 @@ public class ItemBuilder extends AppCompatActivity{
                     InputStream is = (InputStream) new URL(url).getContent();
                     Drawable d = Drawable.createFromStream(is, "src name");
                     pic.setImageDrawable(d);
-                    is = (InputStream) new URL(getIntent().getStringExtra("itemPic")).getContent();
-                    d = Drawable.createFromStream(is,"src name");
-                    if(item == 0){
-                      item1.setImageDrawable(d);
 
-                    }
-                    else{
-                        item2.setImageDrawable(d);
-                    }
+                    if(item != -1){
+                        is = (InputStream) new URL(itempic[item]).getContent();
+                        itempictures[item] = Drawable.createFromStream(is, "src name");
+                        if(itempictures[0] != null){
+                            item1.setImageDrawable(itempictures[0]);
+                        }
+                        if (itempictures[1] != null){
+                            item2.setImageDrawable(itempictures[1]);
+                        }
+                        if(itempictures[2] != null){
+                             item3.setImageDrawable(itempictures[2]);
+                        }
+                        if(itempictures[3] != null){
+                            item4.setImageDrawable(itempictures[3]);
+                        }
+                        if (itempictures[4] != null){
+                            item5.setImageDrawable(itempictures[4]);
+                        }
+                        if(itempictures[5] != null){
+                            item6.setImageDrawable(itempictures[5]);
+                        }
+                     }
+
+
                     Log.d("Builder", "Message: " + d.toString());
                 } catch (Exception e) {
                     Log.d("Builder", "Error: " + e.toString());
@@ -219,7 +257,8 @@ public class ItemBuilder extends AppCompatActivity{
             public void onClick(View view) {
                 Intent i = new Intent(ItemBuilder.this, ItemPicker.class);
                 i.putExtra("itemNum", 0);
-                startActivity(i);            }
+                startActivity(i);
+            }
         });
 
         item2.setOnClickListener(new View.OnClickListener() {
@@ -227,6 +266,42 @@ public class ItemBuilder extends AppCompatActivity{
             public void onClick(View view) {
                 Intent i = new Intent(new Intent(ItemBuilder.this, ItemPicker.class));
                 i.putExtra("itemNum", 1);
+                startActivity(i);
+            }
+        });
+
+        item3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(new Intent(ItemBuilder.this, ItemPicker.class));
+                i.putExtra("itemNum", 2);
+                startActivity(i);
+            }
+        });
+
+        item4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(new Intent(ItemBuilder.this, ItemPicker.class));
+                i.putExtra("itemNum", 3);
+                startActivity(i);
+            }
+        });
+
+        item5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(new Intent(ItemBuilder.this, ItemPicker.class));
+                i.putExtra("itemNum", 4);
+                startActivity(i);
+            }
+        });
+
+        item6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(new Intent(ItemBuilder.this, ItemPicker.class));
+                i.putExtra("itemNum", 5);
                 startActivity(i);
             }
         });

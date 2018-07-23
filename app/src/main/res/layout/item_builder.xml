@@ -92,31 +92,35 @@
         android:layout_below="@id/attackspd"
         android:layout_toRightOf="@+id/item_1" />
 
-    <Button
+    <ImageButton
         android:id="@+id/item_3"
         android:layout_width="60dp"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
+        android:scaleType="fitCenter"
         android:layout_below="@id/attackspd"
         android:layout_toRightOf="@+id/item_2"/>
 
-    <Button
+    <ImageButton
         android:id="@+id/item_4"
         android:layout_width="60dp"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
+        android:scaleType="fitCenter"
         android:layout_below="@id/attackspd"
         android:layout_toRightOf="@+id/item_3"/>
 
-    <Button
+    <ImageButton
         android:id="@+id/item_5"
         android:layout_width="60dp"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
+        android:scaleType="fitCenter"
         android:layout_below="@id/attackspd"
         android:layout_toRightOf="@+id/item_4"/>
 
-    <Button
+    <ImageButton
         android:id="@+id/item_6"
         android:layout_width="60dp"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
+        android:scaleType="fitCenter"
         android:layout_below="@id/attackspd"
         android:layout_toRightOf="@+id/item_5"/>
 
@@ -124,5 +128,5 @@
         android:id="@+id/pic"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:translationY="20dp"/>
+        android:translationY="50dp"/>
 </RelativeLayout>
