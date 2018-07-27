@@ -64,6 +64,9 @@ public void onBindViewHolder(final RecyclerItemHolder holder,final int position)
 
         try{
         holder.name.setText(mDataset.getJSONObject(holder.getAdapterPosition()).getString("DeviceName"));
+
+            int leng = mDataset.length();
+            Log.d("ItemBuilder", "LENGTH: " + String.valueOf(leng));
         Thread thread=new Thread(new Runnable(){
 @Override
 public void run(){
@@ -96,45 +99,58 @@ public void onClick(View view) {
     try {
 
         itemObj = mDataset.getJSONObject(holder.getAdapterPosition()).getJSONObject("ItemDescription").getJSONArray("Menuitems");
-        Log.d("ItemBuilder", itemObj.getString(0));
 
-        for(int i = 0; i < 2; i ++) {
-            if (itemObj.getJSONObject(i)!= JSONObject.NULL) {
+
+        for(int i = 0; i < itemObj.length(); i ++) {
+
                 if (itemObj.getJSONObject(i).getString("Description").equals("Health")) {
-                    iHealth = ItemBuilder.health_il + itemObj.getJSONObject(i).getDouble("Value");
+                    iHealth = itemObj.getJSONObject(i).getDouble("Value");
                 }
                 else if (itemObj.getJSONObject(i).getString("Description").equals("Mana")) {
-                    iMana = ItemBuilder.mana_il + itemObj.getJSONObject(i).getDouble("Value");
+                    iMana =  itemObj.getJSONObject(i).getDouble("Value");
                 }
                 else if (itemObj.getJSONObject(i).getString("Description").equals("Physical Protection")) {
-                    iPhysical = ItemBuilder.physical_il + itemObj.getJSONObject(i).getDouble("Value");
+                    iPhysical =  itemObj.getJSONObject(i).getDouble("Value");
                 }
                 else if (itemObj.getJSONObject(i).getString("Description").equals("Magical Protection")) {
-                    iMagical = ItemBuilder.magical_il + itemObj.getJSONObject(i).getDouble("Value");
+                    iMagical = itemObj.getJSONObject(i).getDouble("Value");
                 }
                 else if (itemObj.getJSONObject(i).getString("Description").equals("Attack Speed")) {
                     percentage = itemObj.getJSONObject(i).getString("Value");
                     if(percentage.equals("+15%"))
                     {
-                        iAtkspeed = ItemBuilder.atkspeed_il + .15;
+                        iAtkspeed =.15;
                     }else if (percentage.equals("+20%"))
                     {
-                        iAtkspeed = ItemBuilder.atkspeed_il + .20;
+                        iAtkspeed = .20;
                     }else if (percentage.equals("+25%"))
                     {
-                        iAtkspeed = ItemBuilder.atkspeed_il + .25;
+                        iAtkspeed =.25;
                     }else if (percentage.equals("+30%"))
                     {
-                        iAtkspeed = ItemBuilder.atkspeed_il + .3;
+                        iAtkspeed =.3;
                     }
                 }
                 else if (itemObj.getJSONObject(i).getString("Description").equals("Physical Power") ||
                         itemObj.getJSONObject(i).getString("Description").equals("Magical Power")) {
-                    iPower = ItemBuilder.power_il + itemObj.getJSONObject(i).getDouble("Value");
+                    iPower = itemObj.getJSONObject(i).getDouble("Value");
                 }
                 else if (itemObj.getJSONObject(i).getString("Description").equals("Movement Speed")) {
-                    iSpeed = ItemBuilder.speed_il + itemObj.getJSONObject(i).getDouble("Value");
-                }
+                    percentage = itemObj.getJSONObject(i).getString("Value");
+                    if(percentage.equals("+6%"))
+                    {
+                        iSpeed = .06;
+                    }else if (percentage.equals("+12%"))
+                    {
+                        iSpeed =.12;
+                    }else if (percentage.equals("+18%"))
+                    {
+                        iSpeed =  .18;
+                    }else if (percentage.equals("+25%"))
+                    {
+                        iSpeed = .25;
+                    }
+
 
             }
         }
@@ -144,13 +160,13 @@ public void onClick(View view) {
         intent.putExtra("pick", holder.getAdapterPosition());
         ItemBuilder.itempic[itemNum] = mDataset.getJSONObject(holder.getAdapterPosition()).getString("itemIcon_URL");
 
-        ItemBuilder.speed_il = iSpeed;
-        ItemBuilder.magical_il = iMagical;
-        ItemBuilder.physical_il = iPhysical;
-        ItemBuilder.atkspeed_il = iAtkspeed;
-        ItemBuilder.health_il = iHealth;
-        ItemBuilder.mana_il = iMana;
-        ItemBuilder.power_il = iPower;
+        ItemBuilder.speed_il = ItemBuilder.speed_il + iSpeed;
+        ItemBuilder.magical_il = ItemBuilder.magical_il + iMagical;
+        ItemBuilder.physical_il = ItemBuilder.physical_il + iPhysical;
+        ItemBuilder.atkspeed_il = ItemBuilder.atkspeed_il + iAtkspeed;
+        ItemBuilder.health_il = ItemBuilder.health_il + iHealth;
+        ItemBuilder.mana_il = ItemBuilder.mana_il + iMana;
+        ItemBuilder.power_il = ItemBuilder.power_il + iPower;
 
         intent.putExtra("itemNum", itemNum);
         mContext.startActivity(intent);
