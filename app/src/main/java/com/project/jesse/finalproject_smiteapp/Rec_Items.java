@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -37,6 +38,9 @@ public class Rec_Items extends RecyclerView.Adapter<RecyclerItemHolder>{
 private JSONArray mDataset;
 private Context mContext;
 private Integer itemNum;
+private double iSpeed, iPhysical, iMagical, iAtkspeed, iHealth, iMana, iPower;
+private JSONArray itemObj;
+private String percentage;
 
 public Rec_Items(JSONArray myDataset,Context context, Integer itemnum){
         mDataset=myDataset;
@@ -80,8 +84,6 @@ public void run(){
         }catch(Exception e){
         Log.e("Rec_Lists","Exception: "+e.getMessage());
         }
-
-
         }catch(Exception e)
         {
 
@@ -90,16 +92,71 @@ public void run(){
         holder.parentLayout.setOnClickListener(new View.OnClickListener(){
 @Override
 public void onClick(View view) {
+
     try {
+
+        itemObj = mDataset.getJSONObject(holder.getAdapterPosition()).getJSONObject("ItemDescription").getJSONArray("Menuitems");
+        Log.d("ItemBuilder", itemObj.getString(0));
+
+        for(int i = 0; i < 2; i ++) {
+            if (itemObj.getJSONObject(i)!= JSONObject.NULL) {
+                if (itemObj.getJSONObject(i).getString("Description").equals("Health")) {
+                    iHealth = ItemBuilder.health_il + itemObj.getJSONObject(i).getDouble("Value");
+                }
+                else if (itemObj.getJSONObject(i).getString("Description").equals("Mana")) {
+                    iMana = ItemBuilder.mana_il + itemObj.getJSONObject(i).getDouble("Value");
+                }
+                else if (itemObj.getJSONObject(i).getString("Description").equals("Physical Protection")) {
+                    iPhysical = ItemBuilder.physical_il + itemObj.getJSONObject(i).getDouble("Value");
+                }
+                else if (itemObj.getJSONObject(i).getString("Description").equals("Magical Protection")) {
+                    iMagical = ItemBuilder.magical_il + itemObj.getJSONObject(i).getDouble("Value");
+                }
+                else if (itemObj.getJSONObject(i).getString("Description").equals("Attack Speed")) {
+                    percentage = itemObj.getJSONObject(i).getString("Value");
+                    if(percentage.equals("+15%"))
+                    {
+                        iAtkspeed = ItemBuilder.atkspeed_il + .15;
+                    }else if (percentage.equals("+20%"))
+                    {
+                        iAtkspeed = ItemBuilder.atkspeed_il + .20;
+                    }else if (percentage.equals("+25%"))
+                    {
+                        iAtkspeed = ItemBuilder.atkspeed_il + .25;
+                    }else if (percentage.equals("+30%"))
+                    {
+                        iAtkspeed = ItemBuilder.atkspeed_il + .3;
+                    }
+                }
+                else if (itemObj.getJSONObject(i).getString("Description").equals("Physical Power") ||
+                        itemObj.getJSONObject(i).getString("Description").equals("Magical Power")) {
+                    iPower = ItemBuilder.power_il + itemObj.getJSONObject(i).getDouble("Value");
+                }
+                else if (itemObj.getJSONObject(i).getString("Description").equals("Movement Speed")) {
+                    iSpeed = ItemBuilder.speed_il + itemObj.getJSONObject(i).getDouble("Value");
+                }
+
+            }
+        }
+
+
         Intent intent = new Intent(mContext, ItemBuilder.class);
         intent.putExtra("pick", holder.getAdapterPosition());
         ItemBuilder.itempic[itemNum] = mDataset.getJSONObject(holder.getAdapterPosition()).getString("itemIcon_URL");
-       // intent.putExtra("itemPic", mDataset.getJSONObject(holder.getAdapterPosition()).getString("itemIcon_URL"));
+
+        ItemBuilder.speed_il = iSpeed;
+        ItemBuilder.magical_il = iMagical;
+        ItemBuilder.physical_il = iPhysical;
+        ItemBuilder.atkspeed_il = iAtkspeed;
+        ItemBuilder.health_il = iHealth;
+        ItemBuilder.mana_il = iMana;
+        ItemBuilder.power_il = iPower;
+
         intent.putExtra("itemNum", itemNum);
         mContext.startActivity(intent);
     }
 catch(Exception exception){
-
+Log.d("ItemBuilder", "Error: " + exception);
             }}
         });
         }

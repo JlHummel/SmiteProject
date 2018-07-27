@@ -21,6 +21,7 @@ import java.net.URL;
 
 public class ItemBuilder extends AppCompatActivity{
 
+    public static double atkspeed_il, speed_il, health_il, mana_il, physical_il, magical_il, power_il;
     public static Integer god;
     public static String[] itempic = new String[6];
     public static Drawable[] itempictures = new Drawable[6];
@@ -31,7 +32,8 @@ public class ItemBuilder extends AppCompatActivity{
     ImageView pic;
     JSONObject obj, itemss;
     ImageButton item1,item2, item3, item4, item5, item6;
-    Button up, down;
+    Button up, down, clear;
+    String json = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -56,6 +58,7 @@ public class ItemBuilder extends AppCompatActivity{
         item6 = (ImageButton) findViewById(R.id.item_6);
         up = (Button) findViewById(R.id.lvlUp);
         down = (Button) findViewById(R.id.lvlDown);
+        clear = (Button) findViewById(R.id.clear);
 
         lvl = 1;
 
@@ -65,7 +68,7 @@ public class ItemBuilder extends AppCompatActivity{
         {
             god = getIntent().getIntExtra("pos", -1);
         }
-        String json = null;
+
 
         try {
 
@@ -91,37 +94,50 @@ public class ItemBuilder extends AppCompatActivity{
 
             health_pl = obj.getDouble("HealthPerLevel");
             mana_pl = obj.getDouble("ManaPerLevel");
-            power_pl = obj.getDouble("PhysicalPowerPerLevel");
+            if(obj.getDouble("PhysicalPowerPerLevel") != 0) {
+                power_pl = obj.getDouble("PhysicalPowerPerLevel");
+            }else
+            {
+                power_pl = obj.getDouble("MagicalPowerPerLevel") * 0.2;
+            }
             physical_pl = obj.getDouble("PhysicalProtectionPerLevel");
             magical_pl = obj.getDouble("MagicProtectionPerLevel");
             atkspeed_pl = obj.getDouble("AttackSpeedPerLevel");
 
             atkspeed = obj.getDouble("AttackSpeed") + atkspeed_pl;
-            buff = "Attack Speed: " + obj.getString("AttackSpeed");
+            atkspeed = atkspeed + (atkspeed * atkspeed_il);
+            buff = "Attack Speed: " + atkspeed;
             atkspd.setText(buff);
 
-            health = obj.getDouble("Health") + health_pl;
-            buff = "Health: " + obj.getString("Health");
+            health = obj.getDouble("Health") + health_pl + health_il;
+            buff = "Health: " + health;
             hlt.setText(buff);
 
-            mana = obj.getDouble("Mana") + mana_pl;
-            buff = "Mana: " + obj.getString("Mana");
+            mana = obj.getDouble("Mana") + mana_pl + mana_il;
+            buff = "Mana: " + mana;
             man.setText(buff);
 
-            power = obj.getDouble("PhysicalPower")+ power_pl;
-            buff = "Power: " + obj.getString("PhysicalPower");
-            pwr.setText(buff);
+            if(obj.getDouble("PhysicalPower") != 0) {
+                power = obj.getDouble("PhysicalPower") + power_pl + power_il;
+                buff = "Power: " + power;
+                pwr.setText(buff);
+            }else if(obj.getDouble("MagicalPower") != 0) {
+                power = (obj.getDouble("MagicalPower") * 0.2) + power_pl + power_il;
+                Log.d("ItemBuilder", "Message: " + power +" : "+ power_pl);
+                buff = "Power: " + power;
+                pwr.setText(buff);
+            }
 
-            physical = obj.getDouble("PhysicalProtection") + physical_pl;
-            buff = "Physical Protections: " + obj.getString("PhysicalProtection");
+            physical = obj.getDouble("PhysicalProtection") + physical_pl + physical_il;
+            buff = "Physical Protections: " + physical;
             phys.setText(buff);
 
-            magical = obj.getDouble("MagicProtection") + magical_pl;
-            buff = "Magical Protections: " + obj.getString("MagicProtection");
+            magical = obj.getDouble("MagicProtection") + magical_pl + magical_il;
+            buff = "Magical Protections: " + magical;
             mag.setText(buff);
 
-            speed = obj.getDouble("Speed") + speed_pl;
-            buff = "Speed: " + obj.getString("Speed");
+            speed = obj.getDouble("Speed") + speed_pl + speed_il;
+            buff = "Speed: " + speed;
             spd.setText(buff);
 
 
@@ -303,6 +319,103 @@ public class ItemBuilder extends AppCompatActivity{
                 Intent i = new Intent(new Intent(ItemBuilder.this, ItemPicker.class));
                 i.putExtra("itemNum", 5);
                 startActivity(i);
+            }
+        });
+
+        clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                atkspeed_il = 0;
+                speed_il = 0;
+                health_il = 0;
+                mana_il = 0;
+                power_il = 0;
+                magical_il = 0;
+                physical_il = 0;
+
+                itempictures = new Drawable[6];
+                item1.setImageDrawable(null);
+                item2.setImageDrawable(null);
+                item3.setImageDrawable(null);
+                item4.setImageDrawable(null);
+                item5.setImageDrawable(null);
+                item6.setImageDrawable(null);
+
+
+                try {
+
+                    InputStream is = getResources().openRawResource(R.raw.gods);
+                    int size = is.available();
+                    byte[] buffer = new byte[size];
+                    is.read(buffer);
+                    is.close();
+                    json = new String(buffer, "UTF-8");
+                    obj = new JSONArray(json).getJSONObject(god);
+
+                    is = getResources().openRawResource(R.raw.items);
+                    size = is.available();
+                    byte[] buffr = new byte[size];
+                    is.read(buffr);
+                    is.close();
+                    json = new String(buffer, "UTF-8");
+                    itemss = new JSONArray(json).getJSONObject(pickedItem);
+
+                    String buff = obj.getString("Name") + " lvl: " + lvl;
+                    currName = obj.getString("Name");
+                    name.setText(buff);
+
+                    health_pl = obj.getDouble("HealthPerLevel");
+                    mana_pl = obj.getDouble("ManaPerLevel");
+                    if(obj.getDouble("PhysicalPowerPerLevel") != 0) {
+                        power_pl = obj.getDouble("PhysicalPowerPerLevel");
+                    }else
+                    {
+                        power_pl = obj.getDouble("MagicalPowerPerLevel") * 0.2;
+                    }
+                    physical_pl = obj.getDouble("PhysicalProtectionPerLevel");
+                    magical_pl = obj.getDouble("MagicProtectionPerLevel");
+                    atkspeed_pl = obj.getDouble("AttackSpeedPerLevel");
+
+                    atkspeed = obj.getDouble("AttackSpeed") + atkspeed_pl;
+                    atkspeed = atkspeed + (atkspeed * atkspeed_il);
+                    buff = "Attack Speed: " + atkspeed;
+                    atkspd.setText(buff);
+
+                    health = obj.getDouble("Health") + health_pl + health_il;
+                    buff = "Health: " + health;
+                    hlt.setText(buff);
+
+                    mana = obj.getDouble("Mana") + mana_pl + mana_il;
+                    buff = "Mana: " + mana;
+                    man.setText(buff);
+
+                    if(obj.getDouble("PhysicalPower") != 0) {
+                        power = obj.getDouble("PhysicalPower") + power_pl + power_il;
+                        buff = "Power: " + power;
+                        pwr.setText(buff);
+                    }else if(obj.getDouble("MagicalPower") != 0) {
+                        power = (obj.getDouble("MagicalPower") * 0.2) + power_pl + power_il;
+                        Log.d("ItemBuilder", "Message: " + power +" : "+ power_pl);
+                        buff = "Power: " + power;
+                        pwr.setText(buff);
+                    }
+
+                    physical = obj.getDouble("PhysicalProtection") + physical_pl + physical_il;
+                    buff = "Physical Protections: " + physical;
+                    phys.setText(buff);
+
+                    magical = obj.getDouble("MagicProtection") + magical_pl + magical_il;
+                    buff = "Magical Protections: " + magical;
+                    mag.setText(buff);
+
+                    speed = obj.getDouble("Speed") + speed_pl + speed_il;
+                    buff = "Speed: " + speed;
+                    spd.setText(buff);}catch (Exception e)
+                {
+
+                }
+
             }
         });
 

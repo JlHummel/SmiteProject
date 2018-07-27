@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:hint="Name"
-        android:textSize="30sp" />
+        android:textSize="20sp" />
     <TextView
         android:id="@+id/health"
         android:hint="Health"
@@ -124,9 +124,16 @@
         android:layout_below="@id/attackspd"
         android:layout_toRightOf="@+id/item_5"/>
 
+    <Button
+        android:id="@+id/clear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear"
+        android:layout_below="@id/item_1"/>
+
     <ImageView
         android:id="@+id/pic"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="200dp"
         android:translationY="50dp"/>
 </RelativeLayout>
